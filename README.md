@@ -68,7 +68,7 @@ export REGISTRY_EMAIL=YOUR_DOCKER_HUB_EMAIL
 ```
 kubectl --namespace argo-events \
     create secret \
-    docker-registry regcred \
+    docker-registry docker-registry-credentials \
     --docker-server=$REGISTRY_SERVER \
     --docker-username=$REGISTRY_USER \
     --docker-password=$REGISTRY_PASS \
