@@ -1,0 +1,107 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  creationTimestamp: "2021-07-18T11:48:26Z"
+  finalizers:
+  - sensor-controller
+  generation: 1
+  labels:
+    example: "true"
+  name: workflow
+  namespace: argo-events
+  resourceVersion: "11068"
+  uid: a7032bf0-f29c-447c-b8d1-9e35a736433e
+spec:
+  dependencies:
+  - eventName: argo-test
+    eventSourceName: github
+    name: github
+  triggers:
+  - template:
+      name: github-workflow-trigger
+      k8s:
+        group: argoproj.io
+        version: v1alpha1
+        operation: create
+        resource: workflows
+        source:
+          resource:
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: toolkit-
+              labels:
+                workflows.argoproj.io/archive-strategy: "false"
+            spec:
+              entrypoint: full
+              volumes:
+              - name: kaniko-secret
+                secret:
+                  secretName: regcred
+                  items:
+                    - key: .dockerconfigjson
+                      path: config.json
+              templates:
+              - name: full
+                dag:
+                  tasks:
+                  - name: build-container-image
+                    templateRef:
+                      name: container-image
+                      template: build-kaniko-git
+                    arguments:
+                      parameters:
+                      - name: app_repo
+                        value: git://github.com/stefankochev/argo-test
+                      - name: container_image
+                        value: stefankochev/argo-kaniko-test
+                      - name: container_tag
+                        value: "1.0.0"
+                  - name: deploy-staging
+                    template: echo
+                    arguments:
+                      parameters:
+                      - name: message
+                        value: Deploying to the staging cluster...
+                    dependencies:
+                    - build-container-image
+                  - name: tests
+                    template: echo
+                    arguments:
+                      parameters:
+                      - name: message
+                        value: Running integration tests (before, during, and after the deployment is finished)...
+                    dependencies:
+                    - build-container-image
+                  - name: deploy-production
+                    template: echo
+                    arguments:
+                      parameters:
+                      - name: message
+                        value: Deploying to the production cluster...
+                    dependencies:
+                    - tests
+              - name: echo
+                inputs:
+                  parameters:
+                  - name: message
+                container:
+                  image: alpine
+                  command: [echo]
+                  args:
+                  - "{{inputs.parameters.message}}"
+  - template:
+      log: {}
+      name: log-1
+  
+status:
+  conditions:
+  - lastTransitionTime: "2021-07-18T11:48:26Z"
+    status: "True"
+    type: DependenciesProvided
+  - lastTransitionTime: "2021-07-18T11:48:26Z"
+    status: "True"
+    type: Deployed
+  - lastTransitionTime: "2021-07-18T11:48:26Z"
+    status: "True"
+    type: TriggersProvided
