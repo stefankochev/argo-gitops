@@ -52,7 +52,7 @@ Expose the service on localhost:
 kubectl -n argo-events port-forward deployment/argo-server 2746:2746
 ```
 
-Check http://localhost:2746 for ArgoWorkflows UI.
+Check https://localhost:2746 for ArgoWorkflows UI.
 
 ## Create an example gitops push-based pipeline
 
