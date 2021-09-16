@@ -52,7 +52,7 @@ spec:
                     arguments:
                       parameters:
                       - name: app_repo
-                        value: git://github.com/stefankochev/argo-test
+                        value: git://github.com/stefankochev/argo-gitops
                       - name: container_image
                         value: stefankochev/argo-kaniko-test
                       - name: container_tag
