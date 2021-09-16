@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: container-image
+  namespace: argo-events
 spec:
   templates:
   - name: build-kaniko-git
