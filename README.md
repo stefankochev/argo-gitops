@@ -23,12 +23,13 @@ mv ./argo-darwin-amd64 /usr/local/bin/argo
 argo version
 ```
 
-# Argo Events + Workflows
-
-https://argoproj.github.io/argo-events/installation/
-https://argoproj.github.io/argo-workflows/quick-start/
-
 ## Install Argo Events + Workflows
+
+Resources:
+- https://argoproj.github.io/argo-events/installation/
+- https://argoproj.github.io/argo-workflows/quick-start/
+
+Create k8s resources:
 ```
 kubectl create namespace argo-events
 ```
@@ -51,15 +52,17 @@ Expose the service on localhost:
 kubectl -n argo-events port-forward deployment/argo-server 2746:2746
 ```
 
+Check http://localhost:2764 for ArgoWorkflows UI.
+
 ## Create an example gitops push-based pipeline
 
 Create dockerhub credentials:
 
 ```
 export REGISTRY_SERVER=https://index.docker.io/v1/
-export REGISTRY_USER=stefankochev
-export REGISTRY_PASS=
-export REGISTRY_EMAIL=stefan.kochev@gmail.com
+export REGISTRY_USER=YOUR_DOCKER_HUB_USERNAME
+export REGISTRY_PASS=YOUR_DOCKER_HUB_PASSWORD
+export REGISTRY_EMAIL=YOUR_DOCKER_HUB_EMAIL
 ```
 
 ```
