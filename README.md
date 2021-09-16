@@ -89,4 +89,4 @@ Expose your localhost to the world:
 ./ngrok http 12000
 ```
 
-You can now push some updates to the repo, and check the pipeline execution.
+You can now push some updates to the repo, and check the pipeline execution. Hooray!!!
