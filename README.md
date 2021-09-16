@@ -1,3 +1,5 @@
+## GitOps with Argo Project
+
 Create a cluster:
 ```
 minikube start
