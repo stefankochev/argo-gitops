@@ -93,6 +93,11 @@ Expose your localhost to the world:
 ./ngrok http 12000
 ```
 
+Add the ngrok endpoint as a repo webhook:
+```
+https://{ngrok_endpoint}.ngrok.io/argo-test
+```
+
 You can now push some updates to the repo, and check the pipeline execution. 
 
 Hooray!!!
