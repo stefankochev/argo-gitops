@@ -75,6 +75,10 @@ kubectl --namespace argo-events \
     --docker-email=$REGISTRY_EMAIL
 ```
 
+Replace the `{GITHUB_ACCESS_TOKEN_HERE}` variable in `deployment/github-access-secret.yaml` with
+your base64 encoded github access token.
+
+Deploy the full pipeline:
 ```
 kubectl -n argo-events apply -f deployment/
 ```
