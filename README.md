@@ -78,3 +78,15 @@ kubectl --namespace argo-events \
 ```
 kubectl -n argo-events apply -f deployment/
 ```
+
+Expose the event source port:
+```
+kubectl -n argo-events port-forward $(kubectl -n argo-events get pod -l eventsource-name=github -o name) 12000:12000
+```
+
+Expose your localhost to the world:
+```
+./ngrok http 12000
+```
+
+You can now push some updates to the repo, and check the pipeline execution.
