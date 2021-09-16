@@ -76,5 +76,5 @@ kubectl --namespace argo-events \
 ```
 
 ```
-kubectl -n argo-events apply -f deployment/*
+kubectl -n argo-events apply -f deployment/
 ```
