@@ -29,23 +29,45 @@ Resources:
 - https://argoproj.github.io/argo-events/installation/
 - https://argoproj.github.io/argo-workflows/quick-start/
 
-Create k8s resources:
+### Creating resources:
+
+Create a namespace:
 ```
 kubectl create namespace argo-events
 ```
+
+Install argo-events:
+```
+kubectl apply -f argo/argo-events-namespace-install.yaml
+```
+
+or
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-events/stable/manifests/namespace-install.yaml
 ```
 
+Install argo-events event-bus:
+```
+kubectl apply -n argo-events -f argo/event-bus-native.yaml
+```
+
+or
+
 ```
 kubectl apply -n argo-events -f https://raw.githubusercontent.com/argoproj/argo-events/stable/examples/eventbus/native.yaml
 ```
 
+Install argo-workflows:
+```
+kubectl apply -n argo-events -f argo/argo-workflows/quick-start-postgres.yaml
+```
+
+or
+
 ```
 kubectl apply -n argo-events -f https://raw.githubusercontent.com/argoproj/argo-workflows/stable/manifests/quick-start-postgres.yaml
 ```
-
 
 Expose the service on localhost:
 ```
