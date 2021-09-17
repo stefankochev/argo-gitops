@@ -20,7 +20,7 @@ spec:
       data:
         - path: body.app.head_commit.message
           type: string
-          comparator: "=="
+          comparator: "="
           value:
             - "Check Something"
   triggers:
