@@ -18,11 +18,11 @@ spec:
     eventName: argo-gitops
     filters:
       data:
-        - path: body.repository.name
+        - path: body.commits.0.message
           type: string
           comparator: "="
           value:
-            - "argo-gitops"
+            - "Check Something"
   triggers:
   - template:
       name: github-workflow-trigger
