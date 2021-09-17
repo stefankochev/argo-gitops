@@ -61,6 +61,9 @@ spec:
                   - name: run-lint-check
                     template: lint-check
 
+                  - name: run-format-check
+                    template: format-check
+
                   - name: build-container-image
                     templateRef:
                       name: container-image
@@ -76,6 +79,7 @@ spec:
                     dependencies:
                     - run-unit-tests
                     - run-lint-check
+                    - run-format-check
 
                   - name: run-functional-tests
                     template: functional-tests
@@ -97,6 +101,25 @@ spec:
                     
                     echo "Running lint check..."
                     flake8 app.py
+                  volumeMounts:
+                  - name: github-access
+                    mountPath: /.github/
+
+              - name: format-check
+                script:
+                  image: python:3.8
+                  command: [sh]
+                  source: |
+                    echo "Cloning the repo..."
+
+                    git clone https://github.com/stefankochev/argo-gitops.git
+                    cd argo-gitops
+
+                    echo "Install requirements..."
+                    pip install -r requirements.txt
+                    
+                    echo "Running format check with black formatter..."
+                    black --check app.py
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
