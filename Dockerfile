@@ -9,4 +9,3 @@ COPY entry.sh /entry.sh
 EXPOSE 5000
 
 CMD [ "bash", "entry.sh" ]
-
