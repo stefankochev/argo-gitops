@@ -18,7 +18,7 @@ spec:
     eventName: argo-gitops
     filters:
       data:
-        - path: body.head_commit.message
+        - path: body.commits.0.message
           type: string
           comparator: "="
           value:
