@@ -16,6 +16,13 @@ spec:
   - name: github
     eventSourceName: github-event-source
     eventName: argo-gitops
+    filters:
+      data:
+        - path: body.head_commit.message
+          type: string
+          comparator: "=="
+          value:
+            - "Check Something"
   triggers:
   - template:
       name: github-workflow-trigger
