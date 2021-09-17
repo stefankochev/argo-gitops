@@ -94,14 +94,3 @@ spec:
       log: {}
       name: log-1
   
-status:
-  conditions:
-  - lastTransitionTime: "2021-07-18T11:48:26Z"
-    status: "True"
-    type: DependenciesProvided
-  - lastTransitionTime: "2021-07-18T11:48:26Z"
-    status: "True"
-    type: Deployed
-  - lastTransitionTime: "2021-07-18T11:48:26Z"
-    status: "True"
-    type: TriggersProvided
