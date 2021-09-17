@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: stefankochev/argo-kaniko-test:v1
+          image: stefankochev/argo-kaniko-test:latest
           imagePullPolicy: 'IfNotPresent'
           ports:
             - containerPort: 5432
