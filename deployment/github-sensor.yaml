@@ -13,9 +13,9 @@ metadata:
   uid: a7032bf0-f29c-447c-b8d1-9e35a736433e
 spec:
   dependencies:
-  - eventName: argo-test
-    eventSourceName: github
-    name: github
+  - name: github
+    eventSourceName: github-event-source
+    eventName: argo-gitops
   triggers:
   - template:
       name: github-workflow-trigger
@@ -29,7 +29,7 @@ spec:
             apiVersion: argoproj.io/v1alpha1
             kind: Workflow
             metadata:
-              generateName: toolkit-
+              generateName: argo-build-
               labels:
                 workflows.argoproj.io/archive-strategy: "false"
             spec:
