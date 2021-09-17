@@ -101,7 +101,13 @@ Replace the `{GITHUB_ACCESS_TOKEN_HERE}` variable in `deployment/github-access-s
 your base64 encoded github access token. To do so, follow the instructions 
 [here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
-You can also check the Argo Events docs [github example](https://argoproj.github.io/argo-events/eventsources/setup/github/).
+Don't forget to base64 encode the token:
+```
+echo -n <api-token-key> | base64
+```
+
+Check the Argo Events docs [github example](https://argoproj.github.io/argo-events/eventsources/setup/github/) for more
+details.
 
 Deploy the full pipeline:
 ```
