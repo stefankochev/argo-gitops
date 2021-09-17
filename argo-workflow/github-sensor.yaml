@@ -96,7 +96,7 @@ spec:
                     git clone https://github.com/stefankochev/argo-gitops.git
                     cd argo-gitops
 
-                    echo "Install requirements..."
+                    echo "Installing requirements..."
                     pip install -r requirements.txt
                     
                     echo "Running lint check..."
@@ -115,7 +115,7 @@ spec:
                     git clone https://github.com/stefankochev/argo-gitops.git
                     cd argo-gitops
 
-                    echo "Install requirements..."
+                    echo "Installing requirements..."
                     pip install -r requirements.txt
                     
                     echo "Running format check with black formatter..."
@@ -134,7 +134,7 @@ spec:
                     git clone https://github.com/stefankochev/argo-gitops.git
                     cd argo-gitops
 
-                    echo "Install requirements..."
+                    echo "Installing requirements..."
                     pip install -r requirements.txt
                     
                     echo "Running unit tests..."
@@ -153,7 +153,7 @@ spec:
                     git clone https://github.com/stefankochev/argo-gitops.git
                     cd argo-gitops
 
-                    echo "Install requirements..."
+                    echo "Installing requirements..."
                     pip install -r requirements.txt
                     
                     echo "Running functional tests..."
