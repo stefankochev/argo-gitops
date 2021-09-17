@@ -86,6 +86,27 @@ spec:
                     dependencies:
                     - build-container-image
 
+                  - name: promote-staging
+                    templateRef:
+                      name: promote
+                      template: promote
+                    arguments:
+                      parameters:
+                      - name: environment
+                        value: main
+                      - name: repo_owner
+                        value: stefankochev
+                      - name: repo_name
+                        value: argo-gitops
+                      - name: image_owner
+                        value: stefankochev
+                      - name: image_name
+                        value: "argo-kaniko-test"
+                      - name: tag
+                        value: "v1"
+                    dependencies:
+                    - run-functional-tests
+
               - name: lint-check
                 script:
                   image: python:3.8

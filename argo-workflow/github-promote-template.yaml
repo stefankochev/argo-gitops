@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: promote
+  namespace: argo-events
+spec:
+  templates:
+  - name: promote
+    inputs:
+      parameters:
+      - name: environment
+      - name: repo_owner
+      - name: repo_name
+      - name: image_owner
+      - name: image_name
+      - name: tag
+    script:
+      image: python:3.8
+      command: [sh]
+      source: |
+        set -e
+        git clone https://$(cat /.github/token)@github.com/{{inputs.parameters.repo_owner}}/{{inputs.parameters.repo_name}}
+        cd {{inputs.parameters.repo_name}}
+        sleep 2
+        echo BEFORE:
+        cat deployment/deployment.yaml
+        echo AFTER:
+        cat deployment/deployment.yaml | sed -e "/{{inputs.parameters.image_owner}}\/{{inputs.parameters.image_name}}:.*/{{inputs.parameters.image_owner}}\/{{inputs.parameters.image_name}}:{{inputs.parameters.tag}}/g" | tee deployment/deployment.yaml
+        git config user.name "$(cat /.github/user)"
+        git config user.email "$(cat /.github/email)"
+        git add deployment/deployment.yaml
+        git commit -m "Upgraded deployment/deployment.yaml with the tag {{inputs.parameters.tag}}"
+        git push
+      volumeMounts:
+      - name: github-access
+        mountPath: /.github/
