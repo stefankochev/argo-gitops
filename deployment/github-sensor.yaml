@@ -33,7 +33,7 @@ spec:
               labels:
                 workflows.argoproj.io/archive-strategy: "false"
             spec:
-              entrypoint: full
+              entrypoint: build
               volumes:
               - name: kaniko-secret
                 secret:
@@ -42,7 +42,7 @@ spec:
                     - key: .dockerconfigjson
                       path: config.json
               templates:
-              - name: full
+              - name: build
                 dag:
                   tasks:
                   - name: build-container-image
