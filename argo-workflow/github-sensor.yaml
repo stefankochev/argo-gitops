@@ -22,7 +22,7 @@ spec:
           type: string
           comparator: "=="
           value:
-            - "Check Something"
+            - "Check Somethingg"
   triggers:
   - template:
       name: github-workflow-trigger
