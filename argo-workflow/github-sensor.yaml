@@ -20,10 +20,9 @@ spec:
       data:
         - path: body.commits.0.message
           type: string
-          comparator: "="
+          comparator: "!="
           value:
-            - "Check Something"
-            
+            - "AutoUpgraded*"
   triggers:
   - template:
       name: github-workflow-trigger

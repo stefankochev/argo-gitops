@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: stefankochev/argo-kaniko-test:latest
+          imagePullPolicy: 'IfNotPresent'
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+          - name: postgres-vol
+            mountPath: /docker-entrypoint-initdb.d
+          env:
+            - name: POSTGRES_DB
+              value: product
+            - name: POSTGRES_USER
+              value: product_robot
+            - name: POSTGRES_PASSWORD
+              value: pr0dr0b0t
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+
+      volumes:
+        - name: postgres-vol
+          configMap:
+            name: postgres-configmap
