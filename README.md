@@ -102,7 +102,7 @@ Replace the variables:
 - `{BASE64_ENCODED_GITHUB_USERNAME_HERE}` and
 - `{BASE64_ENCODED_GITHUB_EMAIL_HERE}`
 
-in `deployment/github-access-secret.yaml` with your base64 encoded github access token and other credentials. To do so, follow the instructions 
+in `argo-workflow/github-access-secret.yaml` with your base64 encoded github access token and other credentials. To do so, follow the instructions 
 [here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 `base64` encode command:
@@ -115,7 +115,7 @@ details.
 
 Deploy the full pipeline:
 ```
-kubectl -n argo-events apply -f deployment/
+kubectl -n argo-events apply -f argo-workflow/
 ```
 
 Expose the event source port:
