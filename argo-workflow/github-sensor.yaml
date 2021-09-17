@@ -58,6 +58,9 @@ spec:
                   - name: run-unit-tests
                     template: unit-tests
 
+                  - name: run-lint-check
+                    template: lint-check
+
                   - name: build-container-image
                     templateRef:
                       name: container-image
@@ -72,11 +75,31 @@ spec:
                         value: "1.0.0"
                     dependencies:
                     - run-unit-tests
+                    - run-lint-check
 
                   - name: run-functional-tests
                     template: functional-tests
                     dependencies:
                     - build-container-image
+
+              - name: lint-check
+                script:
+                  image: python:3.8
+                  command: [sh]
+                  source: |
+                    echo "Cloning the repo..."
+
+                    git clone https://github.com/stefankochev/argo-gitops.git
+                    cd argo-gitops
+
+                    echo "Install requirements..."
+                    pip install -r requirements.txt
+                    
+                    echo "Running lint check..."
+                    flake8 app.py
+                  volumeMounts:
+                  - name: github-access
+                    mountPath: /.github/
 
               - name: unit-tests
                 script:
