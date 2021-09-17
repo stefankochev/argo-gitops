@@ -55,6 +55,9 @@ spec:
               - name: build
                 dag:
                   tasks:
+                  - name: run-unit-tests
+                    template: unit-tests
+
                   - name: build-container-image
                     templateRef:
                       name: container-image
@@ -67,12 +70,15 @@ spec:
                         value: stefankochev/argo-kaniko-test
                       - name: container_tag
                         value: "1.0.0"
-                  - name: run-unit-tests
-                    template: tests
+                    dependencies:
+                    - run-unit-tests
+
+                  - name: run-functional-tests
+                    template: functional-tests
                     dependencies:
                     - build-container-image
 
-              - name: tests
+              - name: unit-tests
                 script:
                   image: python:3.8
                   command: [sh]
@@ -85,13 +91,31 @@ spec:
                     echo "Install requirements..."
                     pip install -r requirements.txt
                     
-                    echo "Running tests..."
+                    echo "Running unit tests..."
                     pytest
-                    
-                    echo "Done!"
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
+
+              - name: functional-tests
+                script:
+                  image: python:3.8
+                  command: [sh]
+                  source: |
+                    echo "Cloning the repo..."
+
+                    git clone https://github.com/stefankochev/argo-gitops.git
+                    cd argo-gitops
+
+                    echo "Install requirements..."
+                    pip install -r requirements.txt
+                    
+                    echo "Running functional tests..."
+                    pytest
+                  volumeMounts:
+                  - name: github-access
+                    mountPath: /.github/
+
   - template:
       log: {}
       name: log-1
