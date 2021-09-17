@@ -41,6 +41,16 @@ spec:
                   items:
                     - key: .dockerconfigjson
                       path: config.json
+              - name: github-access
+                secret:
+                  secretName: github-access
+                  items:
+                    - key: token
+                      path: token
+                    - key: user
+                      path: user
+                    - key: email
+                      path: email
               templates:
               - name: build
                 dag:
@@ -57,39 +67,31 @@ spec:
                         value: stefankochev/argo-kaniko-test
                       - name: container_tag
                         value: "1.0.0"
-                  - name: deploy-staging
-                    template: echo
-                    arguments:
-                      parameters:
-                      - name: message
-                        value: Deploying to the staging cluster...
+                  - name: run-unit-tests
+                    template: tests
                     dependencies:
                     - build-container-image
-                  - name: tests
-                    template: echo
-                    arguments:
-                      parameters:
-                      - name: message
-                        value: Running integration tests (before, during, and after the deployment is finished)...
-                    dependencies:
-                    - build-container-image
-                  - name: deploy-production
-                    template: echo
-                    arguments:
-                      parameters:
-                      - name: message
-                        value: Deploying to the production cluster...
-                    dependencies:
-                    - tests
-              - name: echo
-                inputs:
-                  parameters:
-                  - name: message
-                container:
-                  image: alpine
-                  command: [echo]
-                  args:
-                  - "{{inputs.parameters.message}}"
+
+              - name: tests
+                script:
+                  image: python:3.8
+                  command: [sh]
+                  source: |
+                    echo "Cloning the repo..."
+
+                    git clone https://github.com/stefankochev/argo-gitops.git
+                    cd argo-gitops
+
+                    echo "Install requirements..."
+                    pip install -r requirements.txt
+                    
+                    echo "Running tests..."
+                    pytest
+                    
+                    echo "Done!"
+                  volumeMounts:
+                  - name: github-access
+                    mountPath: /.github/
   - template:
       log: {}
       name: log-1

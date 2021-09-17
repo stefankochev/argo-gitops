@@ -97,11 +97,15 @@ kubectl --namespace argo-events \
     --docker-email=$REGISTRY_EMAIL
 ```
 
-Replace the `{GITHUB_ACCESS_TOKEN_HERE}` variable in `deployment/github-access-secret.yaml` with
-your base64 encoded github access token. To do so, follow the instructions 
+Replace the variables:
+- `{BASE64_ENCODED_GITHUB_ACCESS_TOKEN_HERE}` 
+- `{BASE64_ENCODED_GITHUB_USERNAME_HERE}` and
+- `{BASE64_ENCODED_GITHUB_EMAIL_HERE}`
+
+in `deployment/github-access-secret.yaml` with your base64 encoded github access token and other credentials. To do so, follow the instructions 
 [here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
-Don't forget to base64 encode the token:
+`base64` encode command:
 ```
 echo -n <api-token-key> | base64
 ```
