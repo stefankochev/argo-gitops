@@ -120,7 +120,7 @@ kubectl -n argo-events apply -f argo-workflow/
 
 Expose the event source port:
 ```
-kubectl -n argo-events port-forward $(kubectl -n argo-events get pod -l eventsource-name=github -o name) 12000:12000
+kubectl -n argo-events port-forward $(kubectl -n argo-events get pod -l eventsource-name=github-event-source -o name) 12000:12000
 ```
 
 Expose your localhost to the world:
