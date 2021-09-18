@@ -17,21 +17,7 @@ spec:
           image: stefankochev/argo-kaniko-test:e6ebfac96db9c0bf68d1380b074e5e10c6eb101e
           imagePullPolicy: 'IfNotPresent'
           ports:
-            - containerPort: 5432
-          volumeMounts:
-          - name: postgres-vol
-            mountPath: /docker-entrypoint-initdb.d
+            - containerPort: 5000
           env:
-            - name: POSTGRES_DB
-              value: product
-            - name: POSTGRES_USER
-              value: product_robot
-            - name: POSTGRES_PASSWORD
-              value: pr0dr0b0t
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
-
-      volumes:
-        - name: postgres-vol
-          configMap:
-            name: postgres-configmap
+            - name: ENVIRONMENT
+              value: staging
