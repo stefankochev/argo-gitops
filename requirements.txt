@@ -4,6 +4,7 @@ black==21.9b0
 click==8.0.1
 flake8==3.9.2
 Flask==2.0.1
+gunicorn==20.1.0
 iniconfig==1.1.1
 isort==5.9.3
 itsdangerous==2.0.1

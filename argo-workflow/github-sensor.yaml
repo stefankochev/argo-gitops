@@ -58,10 +58,20 @@ spec:
                       path: user
                     - key: email
                       path: email
+
               templates:
               - name: build
                 dag:
                   tasks:
+                  - name: install-dependencies
+                    template: install-dependencies
+                    arguments:
+                      parameters:
+                      - name: app_repo_clone_url
+                        value: ""
+                      - name: app_repo_name
+                        value: ""
+
                   - name: run-unit-tests
                     template: unit-tests
                     arguments:
@@ -70,6 +80,11 @@ spec:
                         value: ""
                       - name: app_repo_name
                         value: ""
+                      artifacts:
+                      - name: python-packages
+                        from: "{{tasks.install-dependencies.outputs.artifacts.python-packages}}"
+                    dependencies:
+                    - install-dependencies
 
                   - name: run-lint-check
                     template: lint-check
@@ -79,6 +94,11 @@ spec:
                         value: ""
                       - name: app_repo_name
                         value: ""
+                      artifacts:
+                      - name: python-packages
+                        from: "{{tasks.install-dependencies.outputs.artifacts.python-packages}}"
+                    dependencies:
+                    - install-dependencies
 
                   - name: run-format-check
                     template: format-check
@@ -88,6 +108,11 @@ spec:
                         value: ""
                       - name: app_repo_name
                         value: ""
+                      artifacts:
+                      - name: python-packages
+                        from: "{{tasks.install-dependencies.outputs.artifacts.python-packages}}"
+                    dependencies:
+                    - install-dependencies
 
                   - name: build-container-image
                     templateRef:
@@ -114,6 +139,9 @@ spec:
                         value: ""
                       - name: app_repo_name
                         value: ""
+                      artifacts:
+                      - name: python-packages
+                        from: "{{tasks.install-dependencies.outputs.artifacts.python-packages}}"
                     dependencies:
                     - build-container-image
 
@@ -138,7 +166,7 @@ spec:
                     dependencies:
                     - run-functional-tests
 
-              - name: lint-check
+              - name: install-dependencies
                 inputs:
                   parameters:
                   - name: app_repo_clone_url
@@ -154,9 +182,35 @@ spec:
 
                     echo "Installing requirements..."
                     pip install -r requirements.txt
+                  volumeMounts:
+                  - name: github-access
+                    mountPath: /.github/
+                outputs:
+                  artifacts:
+                  - name: python-packages
+                    path: /usr/local/lib/python3.8/site-packages
+                    archive:
+                      none: {}
+
+              - name: lint-check
+                inputs:
+                  parameters:
+                  - name: app_repo_clone_url
+                  - name: app_repo_name
+                  artifacts:
+                  - name: python-packages
+                    path: /usr/local/lib/python3.8/site-packages
+                script:
+                  image: python:3.8
+                  command: [sh]
+                  source: |
+                    echo "Cloning repository..."
+
+                    git clone {{inputs.parameters.app_repo_clone_url}}
+                    cd {{inputs.parameters.app_repo_name}}
                     
                     echo "Running lint check..."
-                    flake8 app.py
+                    python -m flake8 app.py
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
@@ -166,6 +220,9 @@ spec:
                   parameters:
                   - name: app_repo_clone_url
                   - name: app_repo_name
+                  artifacts:
+                  - name: python-packages
+                    path: /usr/local/lib/python3.8/site-packages
                 script:
                   image: python:3.8
                   command: [sh]
@@ -174,12 +231,9 @@ spec:
 
                     git clone {{inputs.parameters.app_repo_clone_url}}
                     cd {{inputs.parameters.app_repo_name}}
-
-                    echo "Installing requirements..."
-                    pip install -r requirements.txt
                     
                     echo "Running format check with black formatter..."
-                    black --check app.py
+                    python -m black --check app.py
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
@@ -189,6 +243,9 @@ spec:
                   parameters:
                   - name: app_repo_clone_url
                   - name: app_repo_name
+                  artifacts:
+                  - name: python-packages
+                    path: /usr/local/lib/python3.8/site-packages
                 script:
                   image: python:3.8
                   command: [sh]
@@ -197,12 +254,9 @@ spec:
 
                     git clone {{inputs.parameters.app_repo_clone_url}}
                     cd {{inputs.parameters.app_repo_name}}
-
-                    echo "Installing requirements..."
-                    pip install -r requirements.txt
                     
                     echo "Running unit tests..."
-                    pytest
+                    python -m pytest
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
@@ -212,6 +266,9 @@ spec:
                   parameters:
                   - name: app_repo_clone_url
                   - name: app_repo_name
+                  artifacts:
+                  - name: python-packages
+                    path: /usr/local/lib/python3.8/site-packages
                 script:
                   image: python:3.8
                   command: [sh]
@@ -220,12 +277,9 @@ spec:
 
                     git clone {{inputs.parameters.app_repo_clone_url}}
                     cd {{inputs.parameters.app_repo_name}}
-
-                    echo "Installing requirements..."
-                    pip install -r requirements.txt
                     
                     echo "Running functional tests..."
-                    pytest
+                    python -m pytest
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
@@ -256,28 +310,36 @@ spec:
           dest: spec.templates.0.dag.tasks.2.arguments.parameters.1.value
         - src:
             dependencyName: github
-            dataKey: body.repository.git_url
+            dataKey: body.repository.clone_url
           dest: spec.templates.0.dag.tasks.3.arguments.parameters.0.value
         - src:
             dependencyName: github
-            dataKey: body.commits.0.id
-          dest: spec.templates.0.dag.tasks.3.arguments.parameters.2.value
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.3.arguments.parameters.1.value
         - src:
             dependencyName: github
-            dataKey: body.repository.clone_url
+            dataKey: body.repository.git_url
           dest: spec.templates.0.dag.tasks.4.arguments.parameters.0.value
         - src:
             dependencyName: github
-            dataKey: body.repository.name
-          dest: spec.templates.0.dag.tasks.4.arguments.parameters.1.value
+            dataKey: body.commits.0.id
+          dest: spec.templates.0.dag.tasks.4.arguments.parameters.2.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.clone_url
+          dest: spec.templates.0.dag.tasks.5.arguments.parameters.0.value
         - src:
             dependencyName: github
             dataKey: body.repository.name
-          dest: spec.templates.0.dag.tasks.5.arguments.parameters.2.value
+          dest: spec.templates.0.dag.tasks.5.arguments.parameters.1.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.6.arguments.parameters.2.value
         - src:
             dependencyName: github
             dataKey: body.commits.0.id
-          dest: spec.templates.0.dag.tasks.5.arguments.parameters.5.value
+          dest: spec.templates.0.dag.tasks.6.arguments.parameters.5.value
   - template:
       log: {}
       name: log-1
