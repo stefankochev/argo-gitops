@@ -76,7 +76,7 @@ kubectl -n argo-events port-forward deployment/argo-server 2746:2746
 
 Check https://localhost:2746 for ArgoWorkflows UI.
 
-## Create an example gitops push-based pipeline
+### Create a push-based gitops pipeline
 
 Create dockerhub credentials:
 
@@ -188,7 +188,7 @@ Check https://localhost:8080 for ArgoCD UI and login the username: `admin` and t
 kubectl create ns staging
 ```
 
-## Modify the pipeline to be a pull-based gitops pipeline
+### Modify the pipeline to be a pull-based gitops pipeline
 
 Apply the ArgoCD project and the ArgoCD application for the staging environment:
 ```
