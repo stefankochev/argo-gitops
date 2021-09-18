@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: flask-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: flask-api
   template:
     metadata:
       labels:
-        app: postgres
+        app: flask-api
     spec:
       containers:
-        - name: postgres
+        - name: flask-api
           image: stefankochev/argo-kaniko-test:e6ebfac96db9c0bf68d1380b074e5e10c6eb101e
           imagePullPolicy: 'IfNotPresent'
           ports:

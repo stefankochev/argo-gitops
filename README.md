@@ -188,3 +188,13 @@ Check https://localhost:8080 for ArgoCD UI and login the username: `admin` and t
 ```
 kubectl create ns staging
 ```
+
+Apply the ArgoCD project and the ArgoCD application for the staging environment:
+```
+kubectl apply -f argo-cd-project.yaml
+```
+
+and the application:
+```
+kubectl apply -f argo-cd-app.yaml
+```
