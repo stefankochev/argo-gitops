@@ -25,7 +25,7 @@ argo version
 
 ## Install Argo Events + Workflows
 
-Resources:
+Reference:
 - https://argoproj.github.io/argo-events/installation/
 - https://argoproj.github.io/argo-workflows/quick-start/
 
@@ -136,3 +136,55 @@ https://{ngrok_endpoint}.ngrok.io/argo-test
 You can now push some updates to the repo, and check the pipeline execution. 
 
 Hooray!!!
+
+## Install Argo CD
+
+[Reference docs.](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+
+Create a namespace:
+```
+kubectl create namespace argocd
+```
+
+Install argo-events:
+```
+kubectl apply -n argocd -f argo/argo-cd-core-install.yaml
+```
+
+or
+
+```
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
+```
+
+Change the argocd-server service type to LoadBalancer:
+```
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+```
+
+Wait to see the deployments ap and running:
+```
+watch kubectl get pods -n argocd
+```
+
+or:
+```
+watch kubectl get deployments -n argocd
+```
+
+Once the servers are all ready, run:
+```
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+To login into ArgoCD UI username and passwords are needed.
+To get the password for the `admin` username, run:
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Check https://localhost:8080 for ArgoCD UI and login the username: `admin` and the password.
+
+```
+kubectl create ns staging
+```
