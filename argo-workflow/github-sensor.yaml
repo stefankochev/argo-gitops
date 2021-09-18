@@ -78,11 +78,11 @@ spec:
                     arguments:
                       parameters:
                       - name: app_repo
-                        value: git://github.com/stefankochev/argo-gitops
+                        value: ""
                       - name: container_image
                         value: stefankochev/argo-kaniko-test
                       - name: container_tag
-                        value: "1.0.0"
+                        value: ""
                     dependencies:
                     - run-unit-tests
                     - run-lint-check
@@ -110,7 +110,7 @@ spec:
                       - name: image_name
                         value: "argo-kaniko-test"
                       - name: tag
-                        value: "v1"
+                        value: ""
                     dependencies:
                     - run-functional-tests
 
@@ -189,7 +189,19 @@ spec:
                   volumeMounts:
                   - name: github-access
                     mountPath: /.github/
-
+        parameters:
+        - src:
+            dependencyName: github
+            dataKey: body.repository.git_url
+          dest: spec.templates.0.dag.tasks.3.arguments.parameters.0.value
+        - src:
+            dependencyName: github
+            dataKey: body.commits.0.id
+          dest: spec.templates.0.dag.tasks.3.arguments.parameters.2.value
+        - src:
+            dependencyName: github
+            dataKey: body.commits.0.id
+          dest: spec.templates.0.dag.tasks.5.arguments.parameters.5.value
   - template:
       log: {}
       name: log-1
