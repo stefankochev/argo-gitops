@@ -3,6 +3,12 @@ Setting up a Kubernetes Native Continuous Deployment pipeline following the
 [GitOps](https://www.gitops.tech/) principles, using 
 [ArgoProject Tools](https://argoproj.github.io/).
 
+References:
+- [Argo Workflows Tutorial](https://www.youtube.com/watch?v=UMaivwrAyTA)
+- [Argo CD Tutorial](https://www.youtube.com/watch?v=vpWQeoaiRM4)
+- [Argo Rollouts Tutorial](https://www.youtube.com/watch?v=84Ky0aPbHvY)
+
+
 ## Setup
 
 Create a cluster:
