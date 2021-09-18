@@ -1,4 +1,8 @@
 ## GitOps with Argo Project
+Setting up a Continuous Deployment pipeline following the 
+[GitOps](https://www.gitops.tech/) principles. 
+
+## Setup
 
 Create a cluster:
 ```
