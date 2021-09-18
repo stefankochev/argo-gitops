@@ -64,6 +64,12 @@ spec:
                   tasks:
                   - name: run-unit-tests
                     template: unit-tests
+                    arguments:
+                      parameters:
+                      - name: app_repo_clone_url
+                        value: ""
+                      - name: app_repo_name
+                        value: ""
 
                   - name: run-lint-check
                     template: lint-check
@@ -76,6 +82,12 @@ spec:
 
                   - name: run-format-check
                     template: format-check
+                    arguments:
+                      parameters:
+                      - name: app_repo_clone_url
+                        value: ""
+                      - name: app_repo_name
+                        value: ""
 
                   - name: build-container-image
                     templateRef:
@@ -96,6 +108,12 @@ spec:
 
                   - name: run-functional-tests
                     template: functional-tests
+                    arguments:
+                      parameters:
+                      - name: app_repo_clone_url
+                        value: ""
+                      - name: app_repo_name
+                        value: ""
                     dependencies:
                     - build-container-image
 
@@ -110,7 +128,7 @@ spec:
                       - name: repo_owner
                         value: stefankochev
                       - name: repo_name
-                        value: argo-gitops
+                        value: ""
                       - name: image_owner
                         value: stefankochev
                       - name: image_name
@@ -144,14 +162,18 @@ spec:
                     mountPath: /.github/
 
               - name: format-check
+                inputs:
+                  parameters:
+                  - name: app_repo_clone_url
+                  - name: app_repo_name
                 script:
                   image: python:3.8
                   command: [sh]
                   source: |
                     echo "Cloning repository..."
 
-                    git clone https://github.com/stefankochev/argo-gitops.git
-                    cd argo-gitops
+                    git clone {{inputs.parameters.app_repo_clone_url}}
+                    cd {{inputs.parameters.app_repo_name}}
 
                     echo "Installing requirements..."
                     pip install -r requirements.txt
@@ -163,14 +185,18 @@ spec:
                     mountPath: /.github/
 
               - name: unit-tests
+                inputs:
+                  parameters:
+                  - name: app_repo_clone_url
+                  - name: app_repo_name
                 script:
                   image: python:3.8
                   command: [sh]
                   source: |
                     echo "Cloning repository..."
 
-                    git clone https://github.com/stefankochev/argo-gitops.git
-                    cd argo-gitops
+                    git clone {{inputs.parameters.app_repo_clone_url}}
+                    cd {{inputs.parameters.app_repo_name}}
 
                     echo "Installing requirements..."
                     pip install -r requirements.txt
@@ -182,14 +208,18 @@ spec:
                     mountPath: /.github/
 
               - name: functional-tests
+                inputs:
+                  parameters:
+                  - name: app_repo_clone_url
+                  - name: app_repo_name
                 script:
                   image: python:3.8
                   command: [sh]
                   source: |
-                    echo "Cloning the repo..."
+                    echo "Cloning repository..."
 
-                    git clone https://github.com/stefankochev/argo-gitops.git
-                    cd argo-gitops
+                    git clone {{inputs.parameters.app_repo_clone_url}}
+                    cd {{inputs.parameters.app_repo_name}}
 
                     echo "Installing requirements..."
                     pip install -r requirements.txt
@@ -202,16 +232,12 @@ spec:
         parameters:
         - src:
             dependencyName: github
-            dataKey: body.repository.git_url
-          dest: spec.templates.0.dag.tasks.3.arguments.parameters.0.value
+            dataKey: body.repository.clone_url
+          dest: spec.templates.0.dag.tasks.0.arguments.parameters.0.value
         - src:
             dependencyName: github
-            dataKey: body.commits.0.id
-          dest: spec.templates.0.dag.tasks.3.arguments.parameters.2.value
-        - src:
-            dependencyName: github
-            dataKey: body.commits.0.id
-          dest: spec.templates.0.dag.tasks.5.arguments.parameters.5.value
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.0.arguments.parameters.1.value
         - src:
             dependencyName: github
             dataKey: body.repository.clone_url
@@ -220,6 +246,38 @@ spec:
             dependencyName: github
             dataKey: body.repository.name
           dest: spec.templates.0.dag.tasks.1.arguments.parameters.1.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.clone_url
+          dest: spec.templates.0.dag.tasks.2.arguments.parameters.0.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.2.arguments.parameters.1.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.git_url
+          dest: spec.templates.0.dag.tasks.3.arguments.parameters.0.value
+        - src:
+            dependencyName: github
+            dataKey: body.commits.0.id
+          dest: spec.templates.0.dag.tasks.3.arguments.parameters.2.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.clone_url
+          dest: spec.templates.0.dag.tasks.4.arguments.parameters.0.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.4.arguments.parameters.1.value
+        - src:
+            dependencyName: github
+            dataKey: body.repository.name
+          dest: spec.templates.0.dag.tasks.5.arguments.parameters.2.value
+        - src:
+            dependencyName: github
+            dataKey: body.commits.0.id
+          dest: spec.templates.0.dag.tasks.5.arguments.parameters.5.value
   - template:
       log: {}
       name: log-1
