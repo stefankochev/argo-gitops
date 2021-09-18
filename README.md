@@ -135,7 +135,6 @@ https://{ngrok_endpoint}.ngrok.io/argo-test
 
 You can now push some updates to the repo, and check the pipeline execution. 
 
-Hooray!!!
 
 ## Install Argo CD
 
@@ -162,7 +161,7 @@ Change the argocd-server service type to LoadBalancer:
 kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 ```
 
-Wait to see the deployments ap and running:
+Wait to see the deployments up and running:
 ```
 watch kubectl get pods -n argocd
 ```
@@ -189,6 +188,8 @@ Check https://localhost:8080 for ArgoCD UI and login the username: `admin` and t
 kubectl create ns staging
 ```
 
+## Modify the pipeline to be a pull-based gitops pipeline
+
 Apply the ArgoCD project and the ArgoCD application for the staging environment:
 ```
 kubectl apply -f argo-cd-project.yaml
@@ -198,3 +199,8 @@ and the application:
 ```
 kubectl apply -f argo-cd-app.yaml
 ```
+
+This should be the only time applying manually kubernetes manifests. Every new update
+should be picked and applied by ArgoCD.
+
+Hooray!!!
