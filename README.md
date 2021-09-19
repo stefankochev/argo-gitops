@@ -226,3 +226,34 @@ This should be the only time applying manually kubernetes manifests. Every new u
 should be picked and applied by ArgoCD.
 
 Hooray!!!
+
+
+## Argo Rollouts
+
+```
+kubectl create namespace argo-rollouts
+```
+
+```
+kubectl apply -n argo-rollouts -f argo/argo-rollouts-install.yaml
+```
+
+```
+kubectl create ns prod
+```
+
+```
+kubectl apply -f deployment-canary/
+```
+
+```
+kubectl argo rollouts -n prod get rollout flask-api-canary-rollout
+```
+
+```
+kubectl argo rollouts -n prod set image flask-api-canary-rollout flask-api=gcr.io/google-samples/hello-app:2.0
+```
+
+```
+kubectl argo rollouts -n prod promote flask-api-canary-rollout
+```
