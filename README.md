@@ -16,7 +16,7 @@ Create a cluster with minikube (as a vm):
 minikube start --vm=true
 ```
 
-Enable nginx ingres:
+Enable nginx ingress:
 ```
 minikube addons enable ingress
 ```
