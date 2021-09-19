@@ -266,6 +266,18 @@ kubectl apply -f deployment-canary/
 kubectl argo rollouts -n prod get rollout flask-api-canary-rollout
 ```
 
+Get the cluster entry IP address:
+```
+minikube ip
+```
+
+Under `/etc/hosts` add a new entry with the format:
+```
+192.168.64.2    argo.canary
+```
+
+*Note replace the IP with the IP returned by the previous command!
+
 ```
 kubectl argo rollouts -n prod set image flask-api-canary-rollout flask-api=gcr.io/google-samples/hello-app:2.0
 ```
