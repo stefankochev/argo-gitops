@@ -227,6 +227,9 @@ Hooray!!!
 
 ## Argo Rollouts
 
+### Install Argo Rollouts
+
+Create a namespace and apply the manifests:
 ```
 kubectl create namespace argo-rollouts
 ```
@@ -235,6 +238,13 @@ kubectl create namespace argo-rollouts
 kubectl apply -n argo-rollouts -f argo/argo-rollouts-install.yaml
 ```
 
+Install the 
+[argo rollouts plugin](https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation) for `kubectl`:
+```
+brew install argoproj/tap/kubectl-argo-rollouts
+```
+
+### Create a canary deployment
 ```
 kubectl create ns prod
 ```
