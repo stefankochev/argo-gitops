@@ -32,11 +32,11 @@ spec:
     spec:
       containers:
       - name: flask-api
-        image: gcr.io/google-samples/hello-app:1.0
+        image: stefankochev/argo-kaniko-test:41a382c73fea10d0e8adfc3d005cbb3aee1619bc
         imagePullPolicy: 'IfNotPresent'
         ports:
           - name: http
-            containerPort: 8080
+            containerPort: 5000
             protocol: TCP
         env:
           - name: ENVIRONMENT

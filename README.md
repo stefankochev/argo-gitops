@@ -244,6 +244,15 @@ Install the
 brew install argoproj/tap/kubectl-argo-rollouts
 ```
 
+Expose the UI service:
+```
+kubectl argo rollouts dashboard --namespace prod
+```
+
+Check the dashboard:
+http://localhost:3100
+
+
 ### Create a canary deployment
 ```
 kubectl create ns prod

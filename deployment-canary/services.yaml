@@ -8,8 +8,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8080
-    targetPort: 8080
+  - port: 5000
+    targetPort: 5000
     protocol: TCP
     name: http
   selector:
@@ -24,8 +24,8 @@ metadata:
     app: flask-api
 spec:
   ports:
-  - port: 8080
-    targetPort: 8080
+  - port: 5000
+    targetPort: 5000
     protocol: TCP
     name: http
   selector:
