@@ -1,9 +1,9 @@
 ## GitOps with Argo Project
-Setting up a Kubernetes Native Continuous Deployment pipeline following the 
-[GitOps](https://www.gitops.tech/) principles, using 
+Setting up a Kubernetes Native Continuous Deployment pipeline, following the 
+[GitOps](https://www.gitops.tech/) principles, using the 
 [ArgoProject Tools](https://argoproj.github.io/).
 
-References:
+Reference/Tutorials (by [DevOpsToolkit](https://www.youtube.com/c/DevOpsToolkit)):
 - [Argo Workflows Tutorial](https://www.youtube.com/watch?v=UMaivwrAyTA)
 - [Argo CD Tutorial](https://www.youtube.com/watch?v=vpWQeoaiRM4)
 - [Argo Rollouts Tutorial](https://www.youtube.com/watch?v=84Ky0aPbHvY)
@@ -11,17 +11,17 @@ References:
 
 ## Setup
 
-Create a cluster with minikube (as a vm):
+Create a cluster with [minikube](https://minikube.sigs.k8s.io/docs/) (as a vm):
 ```
 minikube start --vm=true
 ```
 
-Enable nginx ingress:
+Enable nginx ingress (only possible if cluster created as a vm):
 ```
 minikube addons enable ingress
 ```
 
-Verify that the NGINX Ingress controller is running (This can take up to a minute):
+Verify that the NGINX Ingress controller is running (this can take up to a minute):
 ```
 kubectl get pods -n ingress-nginx
 ```
@@ -45,7 +45,7 @@ mv ./argo-darwin-amd64 /usr/local/bin/argo
 argo version
 ```
 
-## Install Argo Events + Workflows
+## Install Argo Workflows and Argo Events
 
 Reference:
 - https://argoproj.github.io/argo-events/installation/
@@ -124,7 +124,8 @@ Replace the variables:
 - `{BASE64_ENCODED_GITHUB_USERNAME_HERE}` and
 - `{BASE64_ENCODED_GITHUB_EMAIL_HERE}`
 
-in `argo-workflow/github-access-secret.yaml` with your base64 encoded github access token and other credentials. To do so, follow the instructions 
+in `argo-workflow/github-access-secret.yaml` (including the `{ }`) with your base64 encoded github 
+access token and other credentials (username and email). To do so, follow the instructions 
 [here](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token).
 
 `base64` encode command:
@@ -145,17 +146,19 @@ Expose the event source port:
 kubectl -n argo-events port-forward $(kubectl -n argo-events get pod -l eventsource-name=github-event-source -o name) 12000:12000
 ```
 
+If you don't have `ngrok` installed, [install it and create an account](https://ngrok.com/download).
+
 Expose your localhost to the world:
 ```
 ./ngrok http 12000
 ```
 
-Add the ngrok endpoint as a repo webhook:
+Add the ngrok endpoint as a repo webhook (repo Settings -> Webhooks -> Add webhook):
 ```
 https://{ngrok_endpoint}.ngrok.io/argo-test
 ```
 
-You can now push some updates to the repo, and check the pipeline execution. 
+No you can push updates and check the pipeline execution. 
 
 
 ## Install Argo CD
