@@ -11,10 +11,21 @@ References:
 
 ## Setup
 
-Create a cluster:
+Create a cluster with minikube (as a vm):
 ```
-minikube start
+minikube start --vm=true
 ```
+
+Enable nginx ingres:
+```
+minikube addons enable ingress
+```
+
+Verify that the NGINX Ingress controller is running (This can take up to a minute):
+```
+kubectl get pods -n ingress-nginx
+```
+
 
 Install argo cli (optional):
 ```
@@ -71,7 +82,7 @@ kubectl apply -n argo-events -f https://raw.githubusercontent.com/argoproj/argo-
 
 Install argo-workflows:
 ```
-kubectl apply -n argo-events -f argo/argo-workflows/quick-start-postgres.yaml
+kubectl apply -n argo-events -f argo/argo-workflows-quick-start-postgres.yaml
 ```
 
 or
