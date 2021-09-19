@@ -206,9 +206,6 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 Check https://localhost:8080 for ArgoCD UI and login the username: `admin` and the password.
 
-```
-kubectl create ns staging
-```
 
 ### Modify the pipeline to be a pull-based gitops pipeline
 
