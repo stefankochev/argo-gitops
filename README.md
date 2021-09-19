@@ -247,7 +247,7 @@ Install the
 brew install argoproj/tap/kubectl-argo-rollouts
 ```
 
-Expose the UI service:
+Expose the Argo Rollouts dashboard service:
 ```
 kubectl argo rollouts dashboard --namespace prod
 ```
