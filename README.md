@@ -281,10 +281,14 @@ Under `/etc/hosts` add a new entry with the format:
 
 *Note replace the IP with the IP returned by the previous command!
 
+Create a new argo rollouts revision by updating the currently deployed image:
 ```
-kubectl argo rollouts -n prod set image flask-api-canary-rollout flask-api=gcr.io/google-samples/hello-app:2.0
+NEW_IMAGE_VERSION=NEW_IMAGE_VERSION_HERE
+kubectl argo rollouts -n prod set image flask-api-canary-rollout flask-api=$NEW_IMAGE_VERSION
 ```
 
+Continue the rollout to 100% traffic to the new version (the rollout config is paused after 50% 
+of the traffic is redirected to the new version) :
 ```
 kubectl argo rollouts -n prod promote flask-api-canary-rollout
 ```
