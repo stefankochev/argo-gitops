@@ -287,8 +287,8 @@ NEW_IMAGE_VERSION=NEW_IMAGE_VERSION_HERE
 kubectl argo rollouts -n prod set image flask-api-canary-rollout flask-api=$NEW_IMAGE_VERSION
 ```
 
-Continue the rollout to 100% traffic to the new version (the rollout config is paused after 50% 
-of the traffic is redirected to the new version) :
+Continue the rollout to 100% traffic to the new version (the rollout config is set to pause
+the rollout when 50% of the traffic is redirected to the new version) :
 ```
 kubectl argo rollouts -n prod promote flask-api-canary-rollout
 ```
